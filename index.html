@@ -6,175 +6,223 @@
   <title>OpenClaw Dev Dashboard</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
-      min-height: 100vh;
-      padding: 32px 16px;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; padding: 32px 16px; }
     .container { max-width: 1100px; margin: 0 auto; }
-    header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid #21262d;
-    }
+
+    /* Auth */
+    #auth-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .auth-box { background: #161b22; border: 1px solid #21262d; border-radius: 12px; padding: 40px; width: 340px; text-align: center; }
+    .auth-box h2 { margin-bottom: 8px; font-size: 20px; }
+    .auth-box p { color: #8b949e; font-size: 13px; margin-bottom: 24px; }
+    .auth-box input { width: 100%; background: #0d1117; border: 1px solid #21262d; border-radius: 6px; color: #e6edf3; padding: 10px 14px; font-size: 14px; margin-bottom: 12px; outline: none; }
+    .auth-box input:focus { border-color: #388bfd; }
+    .auth-box button { width: 100%; background: #238636; border: none; border-radius: 6px; color: white; padding: 10px; font-size: 14px; cursor: pointer; font-weight: 600; }
+    .auth-box button:hover { background: #2ea043; }
+    .auth-error { color: #f85149; font-size: 12px; margin-top: 8px; }
+    #main { display: none; }
+
+    /* Layout */
+    header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #21262d; }
     header h1 { font-size: 24px; font-weight: 700; }
     header p { color: #8b949e; font-size: 14px; margin-top: 4px; }
-    .stats {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-    }
-    .stat-card {
-      background: #161b22;
-      border: 1px solid #21262d;
-      border-radius: 8px;
-      padding: 16px 24px;
-      flex: 1;
-      min-width: 120px;
-      text-align: center;
-    }
+    .logo { font-size: 28px; }
+    h2.section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Stats */
+    .stats { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+    .stat-card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px 24px; flex: 1; min-width: 120px; text-align: center; }
     .stat-card .num { font-size: 32px; font-weight: 700; }
     .stat-card .label { color: #8b949e; font-size: 13px; margin-top: 4px; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 16px;
-    }
-    .card {
-      background: #161b22;
-      border: 1px solid #21262d;
-      border-radius: 10px;
-      padding: 20px;
-      transition: border-color 0.2s;
-    }
+
+    /* Token Bar */
+    .token-section { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 20px; margin-bottom: 32px; }
+    .token-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .token-label { font-size: 14px; font-weight: 600; }
+    .token-numbers { font-size: 13px; color: #8b949e; }
+    .progress-bar { background: #21262d; border-radius: 100px; height: 10px; overflow: hidden; margin-bottom: 8px; }
+    .progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #238636, #3fb950); transition: width 0.5s; }
+    .token-meta { display: flex; gap: 24px; font-size: 12px; color: #8b949e; flex-wrap: wrap; }
+    .token-meta span strong { color: #e6edf3; }
+
+    /* Daily Activity */
+    .daily-section { margin-bottom: 32px; }
+    .activity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .activity-card { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 18px; }
+    .activity-owner { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .activity-card ul { list-style: none; }
+    .activity-card li { font-size: 13px; color: #8b949e; padding: 5px 0; border-bottom: 1px solid #21262d; display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
+    .activity-card li:last-child { border-bottom: none; }
+    .activity-card li::before { content: '›'; color: #388bfd; flex-shrink: 0; }
+
+    /* Projects Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .card { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 20px; transition: border-color 0.2s; }
     .card:hover { border-color: #388bfd; }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
     .card-title { font-size: 16px; font-weight: 600; }
-    .badge {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 20px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
+    .badge { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
     .badge-done { background: #1f6feb33; color: #58a6ff; border: 1px solid #1f6feb; }
-    .badge-review { background: #d29922 22; color: #d29922; border: 1px solid #9e6a03; }
+    .badge-review { background: #d2992222; color: #d29922; border: 1px solid #9e6a03; }
     .badge-dev { background: #2ea04326; color: #3fb950; border: 1px solid #238636; }
     .badge-blocked { background: #da363326; color: #f85149; border: 1px solid #6e1a1a; }
     .card-desc { color: #8b949e; font-size: 13px; margin-bottom: 14px; line-height: 1.5; }
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: #8b949e;
-    }
-    .owner { display: flex; align-items: center; gap: 6px; }
-    .avatar {
-      width: 20px; height: 20px;
-      background: #21262d;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-    }
+    .card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #8b949e; }
+    .owner-badge { display: flex; align-items: center; gap: 6px; }
+    .avatar { width: 20px; height: 20px; background: #21262d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
     .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-    .tag {
-      background: #21262d;
-      color: #8b949e;
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-    .discord-link {
-      color: #5865f2;
-      text-decoration: none;
-      font-size: 12px;
-    }
+    .tag { background: #21262d; color: #8b949e; font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+    .discord-link { color: #5865f2; text-decoration: none; font-size: 12px; }
     .discord-link:hover { text-decoration: underline; }
-    .updated { color: #484f58; font-size: 11px; }
-    .logo { font-size: 28px; }
+    .updated { color: #484f58; font-size: 11px; margin-top: 8px; }
   </style>
 </head>
 <body>
+
+<!-- Auth Screen -->
+<div id="auth-screen">
+  <div class="auth-box">
+    <div style="font-size:36px;margin-bottom:12px">🦾</div>
+    <h2>OpenClaw Dashboard</h2>
+    <p>アクセスにはパスワードが必要です</p>
+    <input type="password" id="pw-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')checkPw()">
+    <button onclick="checkPw()">ログイン</button>
+    <div class="auth-error" id="pw-error"></div>
+  </div>
+</div>
+
+<!-- Main Dashboard -->
+<div id="main">
   <div class="container">
     <header>
       <div class="logo">🦾</div>
       <div>
         <h1>OpenClaw Dev Dashboard</h1>
-        <p>並行開発プロジェクト一覧</p>
+        <p id="header-date">並行開発プロジェクト管理</p>
       </div>
     </header>
+
+    <!-- Stats -->
     <div class="stats" id="stats"></div>
+
+    <!-- Token Usage -->
+    <div class="token-section" id="token-section">
+      <h2 class="section-title" style="margin-bottom:16px">🤖 トークン使用量</h2>
+      <div class="token-header">
+        <span class="token-label" id="token-label">本日の使用量</span>
+        <span class="token-numbers" id="token-numbers"></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="token-meta" id="token-meta"></div>
+    </div>
+
+    <!-- Daily Activity -->
+    <div class="daily-section">
+      <h2 class="section-title">📋 本日の動き（担当別）</h2>
+      <div class="activity-grid" id="activity-grid"></div>
+    </div>
+
+    <!-- Projects -->
+    <h2 class="section-title">🚀 プロジェクト一覧</h2>
     <div class="grid" id="grid"></div>
   </div>
+</div>
 
-  <script>
-    const statusClass = {
-      '完了': 'badge-done',
-      '要件確認中': 'badge-review',
-      '開発中': 'badge-dev',
-      'ブロック中': 'badge-blocked',
-    };
+<script>
+const PW_HASH = '24bc382e3f81e87483a6402db43ff95418aa77acff75689f481326fa14a940dc';
 
-    const ownerColors = {
-      'abcz': '#f78166',
-      'miura': '#79c0ff',
-      'Y Kuwashima': '#7ee787',
-    };
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 
-    fetch('./projects.json')
-      .then(r => r.json())
-      .then(projects => {
-        // Stats
-        const total = projects.length;
-        const done = projects.filter(p => p.status === '完了').length;
-        const inProgress = projects.filter(p => p.status === '開発中').length;
-        const review = projects.filter(p => p.status === '要件確認中').length;
+async function checkPw() {
+  const val = document.getElementById('pw-input').value;
+  const hash = await sha256(val);
+  if (hash === PW_HASH) {
+    sessionStorage.setItem('oc_auth', '1');
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('main').style.display = 'block';
+    loadDashboard();
+  } else {
+    document.getElementById('pw-error').textContent = 'パスワードが違います';
+  }
+}
 
-        document.getElementById('stats').innerHTML = `
-          <div class="stat-card"><div class="num">${total}</div><div class="label">総プロジェクト</div></div>
-          <div class="stat-card"><div class="num" style="color:#3fb950">${done}</div><div class="label">完了</div></div>
-          <div class="stat-card"><div class="num" style="color:#58a6ff">${inProgress}</div><div class="label">開発中</div></div>
-          <div class="stat-card"><div class="num" style="color:#d29922">${review}</div><div class="label">要件確認中</div></div>
-        `;
+if (sessionStorage.getItem('oc_auth') === '1') {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('main').style.display = 'block';
+  loadDashboard();
+}
 
-        // Cards
-        document.getElementById('grid').innerHTML = projects.map(p => {
-          const initials = p.owner.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-          const color = ownerColors[p.owner] || '#8b949e';
-          const tags = p.stack.map(t => `<span class="tag">${t}</span>`).join('');
-          return `
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title">${p.name}</div>
-                <span class="badge ${statusClass[p.status] || 'badge-review'}">${p.status}</span>
-              </div>
-              <p class="card-desc">${p.description}</p>
-              <div class="tags">${tags}</div>
-              <div class="card-meta">
-                <div class="owner">
-                  <div class="avatar" style="background:${color}22;color:${color}">${initials}</div>
-                  ${p.owner}
-                </div>
-                <a class="discord-link" href="https://discord.com/channels/1476013651021398226/${p.channelId}" target="_blank">#${p.channel}</a>
-              </div>
-              <div class="updated" style="margin-top:8px">更新: ${p.updatedAt}</div>
-            </div>
-          `;
-        }).join('');
-      });
-  </script>
+const statusClass = { '完了':'badge-done','要件確認中':'badge-review','開発中':'badge-dev','ブロック中':'badge-blocked' };
+const ownerColors = { 'abcz':'#f78166','miura':'#79c0ff','Y Kuwashima':'#7ee787' };
+
+function fmt(n) { return n >= 1000000 ? (n/1000000).toFixed(2)+'M' : n >= 1000 ? Math.round(n/1000)+'K' : n; }
+
+async function loadDashboard() {
+  const [projects, daily] = await Promise.all([
+    fetch('./projects.json').then(r=>r.json()),
+    fetch('./daily.json').then(r=>r.json())
+  ]);
+
+  // Header date
+  document.getElementById('header-date').textContent = `更新: ${daily.date} | 並行開発プロジェクト管理`;
+
+  // Stats
+  const total=projects.length, done=projects.filter(p=>p.status==='完了').length,
+        dev=projects.filter(p=>p.status==='開発中').length, rev=projects.filter(p=>p.status==='要件確認中').length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat-card"><div class="num">${total}</div><div class="label">総プロジェクト</div></div>
+    <div class="stat-card"><div class="num" style="color:#3fb950">${done}</div><div class="label">完了</div></div>
+    <div class="stat-card"><div class="num" style="color:#58a6ff">${dev}</div><div class="label">開発中</div></div>
+    <div class="stat-card"><div class="num" style="color:#d29922">${rev}</div><div class="label">要件確認中</div></div>
+  `;
+
+  // Token
+  const t = daily.tokens;
+  const pct = Math.min(100, Math.round(t.used / t.limit * 100));
+  document.getElementById('token-numbers').textContent = `${fmt(t.used)} / ${fmt(t.limit)} tokens (${pct}%)`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  if (pct > 80) document.getElementById('progress-fill').style.background = 'linear-gradient(90deg,#b62324,#f85149)';
+  else if (pct > 60) document.getElementById('progress-fill').style.background = 'linear-gradient(90deg,#9e6a03,#d29922)';
+  document.getElementById('token-meta').innerHTML = `
+    <span>💴 本日コスト: <strong>¥${t.cost_jpy.toLocaleString()}</strong></span>
+    <span>🤖 モデル: <strong>${t.model}</strong></span>
+    <span>📝 ${t.note}</span>
+  `;
+
+  // Activity
+  document.getElementById('activity-grid').innerHTML = daily.activities.map(a => `
+    <div class="activity-card">
+      <div class="activity-owner">${a.emoji} ${a.owner}</div>
+      <ul>${a.summary.map(s=>`<li>${s}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+
+  // Projects
+  document.getElementById('grid').innerHTML = projects.map(p => {
+    const initials = p.owner.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const color = ownerColors[p.owner] || '#8b949e';
+    return `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">${p.name}</div>
+          <span class="badge ${statusClass[p.status]||'badge-review'}">${p.status}</span>
+        </div>
+        <p class="card-desc">${p.description}</p>
+        <div class="tags">${p.stack.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="card-meta">
+          <div class="owner-badge">
+            <div class="avatar" style="background:${color}22;color:${color}">${initials}</div>
+            ${p.owner}
+          </div>
+          <a class="discord-link" href="https://discord.com/channels/1476013651021398226/${p.channelId}" target="_blank">#${p.channel}</a>
+        </div>
+        <div class="updated">更新: ${p.updatedAt}</div>
+      </div>
+    `;
+  }).join('');
+}
+</script>
 </body>
 </html>

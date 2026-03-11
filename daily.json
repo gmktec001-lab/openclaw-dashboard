@@ -1,0 +1,39 @@
+{
+  "date": "2026-03-11",
+  "activities": [
+    {
+      "owner": "abcz",
+      "emoji": "🔴",
+      "summary": [
+        "元リク美容チェーン調査記事用データ納品（5社確定）",
+        "GitHub(gmktec001-lab) × Vercel 連携セットアップ完了",
+        "OpenClaw Dev Dashboardデプロイ（このページ）",
+        "検索ランクトラッカー開発チャンネル作成・要件確認中"
+      ]
+    },
+    {
+      "owner": "miura",
+      "emoji": "🔵",
+      "summary": [
+        "Lemon8スクレイパー開発チャンネル作成・要件確認中",
+        "YouTube Data API改善（方法A/B検討中）",
+        "Shopify新規サイト制作チャンネル作成・要件確認中"
+      ]
+    },
+    {
+      "owner": "Y Kuwashima",
+      "emoji": "🟢",
+      "summary": [
+        "Instagramリサーチツール開発チャンネル作成・要件確認中",
+        "Threadsリサーチツール開発チャンネル作成・要件確認中"
+      ]
+    }
+  ],
+  "tokens": {
+    "used": 850000,
+    "limit": 5000000,
+    "cost_jpy": 1820,
+    "model": "claude-sonnet-4-6",
+    "note": "2026-03-11 推定値（Discordセッション合算）"
+  }
+}
