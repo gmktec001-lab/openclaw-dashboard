@@ -8,6 +8,7 @@
     "channel": "開発_検索ランクトラッカー",
     "channelId": "1481087437215109120",
     "stack": ["Node.js", "Playwright", "Google Sheets API"],
+    "spreadsheetUrl": null,
     "outputs": [
       "開発チャンネル作成済み",
       "要件確認メッセージ送信済み"
@@ -30,6 +31,7 @@
     "channel": "開発_lemon8-youtube-スクレイパー",
     "channelId": "1481116932928438355",
     "stack": ["Python / Node.js", "Playwright", "YouTube Data API"],
+    "spreadsheetUrl": "https://docs.google.com/spreadsheets/d/11rPic32KyeXv02cyIkaxobTJB9H4zoL9XGuXYlitU3M/edit",
     "outputs": [
       "開発チャンネル作成済み",
       "要件確認メッセージ送信済み",
@@ -53,6 +55,7 @@
     "channel": "開発_shopifyサイト制作",
     "channelId": "1481165848985993266",
     "stack": ["Shopify", "Liquid", "HTML/CSS"],
+    "spreadsheetUrl": null,
     "outputs": [
       "開発チャンネル作成済み",
       "要件確認メッセージ送信済み"
@@ -76,6 +79,7 @@
     "channel": "開発_instagramリサーチツール",
     "channelId": "1481169591584423937",
     "stack": ["Playwright", "Google Sheets API", "Python / Node.js"],
+    "spreadsheetUrl": null,
     "outputs": [
       "開発チャンネル作成済み",
       "要件確認メッセージ送信済み（①〜⑤）"
@@ -100,6 +104,7 @@
     "channel": "開発_threadsリサーチツール",
     "channelId": "1481170340536258632",
     "stack": ["Playwright", "Google Sheets API", "Python / Node.js"],
+    "spreadsheetUrl": null,
     "outputs": [
       "開発チャンネル作成済み",
       "要件確認メッセージ送信済み（①〜⑤）",
@@ -124,6 +129,7 @@
     "channel": "一般",
     "channelId": "1476013652568965185",
     "stack": ["GitHub", "Vercel", "HTML/JS"],
+    "spreadsheetUrl": null,
     "outputs": [
       "GitHubアカウント作成（gmktec001-lab）",
       "Vercel連携・Hobbyプラン登録",

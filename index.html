@@ -362,7 +362,10 @@ async function load() {
             <div class="avatar" style="background:${color}30;color:${color}">${initials}</div>
             ${p.owner}
           </div>
-          <a class="discord-link" href="https://discord.com/channels/1476013651021398226/${p.channelId}" target="_blank">#${p.channel}</a>
+          <div style="display:flex;gap:10px;align-items:center">
+            ${p.spreadsheetUrl ? `<a class="discord-link" href="${p.spreadsheetUrl}" target="_blank" style="color:#2a9060" title="出力スプレッドシート">📊 SS</a>` : `<span style="font-size:11px;color:var(--text-muted)">📊 未設定</span>`}
+            <a class="discord-link" href="https://discord.com/channels/1476013651021398226/${p.channelId}" target="_blank">#${p.channel}</a>
+          </div>
         </div>
         ${hasDetail ? `
         <div class="detail-section">
