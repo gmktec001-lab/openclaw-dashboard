@@ -8,6 +8,17 @@
     "channel": "開発_検索ランクトラッカー",
     "channelId": "1481087437215109120",
     "stack": ["Node.js", "Playwright", "Google Sheets API"],
+    "outputs": [
+      "開発チャンネル作成済み",
+      "要件確認メッセージ送信済み"
+    ],
+    "remainingTasks": [
+      "要件確認（クエリ管理方法・スプレッドシートID・頻度）",
+      "Phase1: Playwright Google検索スクレイパー実装",
+      "Phase2: Google Sheets API連携",
+      "Windowsタスクスケジューラ設定",
+      "テスト・納品"
+    ],
     "updatedAt": "2026-03-11"
   },
   {
@@ -19,6 +30,18 @@
     "channel": "開発_lemon8-youtube-スクレイパー",
     "channelId": "1481116932928438355",
     "stack": ["Python / Node.js", "Playwright", "YouTube Data API"],
+    "outputs": [
+      "開発チャンネル作成済み",
+      "要件確認メッセージ送信済み",
+      "YouTube取得方法A/Bの提案済み"
+    ],
+    "remainingTasks": [
+      "要件確認（取得情報・出力形式・頻度・言語）",
+      "Lemon8: Playwright スクレイパー実装",
+      "YouTube: 方法確定後に実装（API改善 or ブラウザ直接取得）",
+      "スプレッドシート連携",
+      "テスト・納品"
+    ],
     "updatedAt": "2026-03-11"
   },
   {
@@ -29,7 +52,19 @@
     "status": "要件確認中",
     "channel": "開発_shopifyサイト制作",
     "channelId": "1481165848985993266",
-    "stack": ["Shopify", "Liquid"],
+    "stack": ["Shopify", "Liquid", "HTML/CSS"],
+    "outputs": [
+      "開発チャンネル作成済み",
+      "要件確認メッセージ送信済み"
+    ],
+    "remainingTasks": [
+      "要件確認（販売商品・デザイン方向性・ドメイン・機能・スケジュール）",
+      "Shopifyアカウント作成 or 確認",
+      "テーマ選定・カスタマイズ",
+      "商品登録・ページ作成",
+      "決済設定・ドメイン連携",
+      "テスト・公開"
+    ],
     "updatedAt": "2026-03-11"
   },
   {
@@ -40,7 +75,20 @@
     "status": "要件確認中",
     "channel": "開発_instagramリサーチツール",
     "channelId": "1481169591584423937",
-    "stack": ["Playwright", "Google Sheets API"],
+    "stack": ["Playwright", "Google Sheets API", "Python / Node.js"],
+    "outputs": [
+      "開発チャンネル作成済み",
+      "要件確認メッセージ送信済み（①〜⑤）"
+    ],
+    "remainingTasks": [
+      "要件確認（クエリ管理・書き込み先・ログイン情報・頻度・言語）",
+      "Playwright Instagramログイン実装",
+      "検索→上位30件スクレイピング実装",
+      "取得情報（フォロワー数・いいね等）パース",
+      "Google Sheets API書き込み実装",
+      "Windowsタスクスケジューラ設定",
+      "テスト・納品"
+    ],
     "updatedAt": "2026-03-11"
   },
   {
@@ -51,18 +99,41 @@
     "status": "要件確認中",
     "channel": "開発_threadsリサーチツール",
     "channelId": "1481170340536258632",
-    "stack": ["Playwright", "Google Sheets API"],
+    "stack": ["Playwright", "Google Sheets API", "Python / Node.js"],
+    "outputs": [
+      "開発チャンネル作成済み",
+      "要件確認メッセージ送信済み（①〜⑤）",
+      "Instagram共通フレームワーク化を提案済み"
+    ],
+    "remainingTasks": [
+      "要件確認（取得情報・件数・頻度・スプレッドシート構成）",
+      "Threads検索スクレイピング実装",
+      "Instagramとの共通コード設計",
+      "Google Sheets API書き込み実装",
+      "Windowsタスクスケジューラ設定",
+      "テスト・納品"
+    ],
     "updatedAt": "2026-03-11"
   },
   {
     "id": "github-vercel-setup",
     "name": "GitHub × Vercel 連携",
     "owner": "abcz",
-    "description": "GitHub(gmktec001-lab)＆Vercelアカウント作成・連携",
+    "description": "GitHub(gmktec001-lab)＆Vercelアカウント作成・連携＋Dev Dashboard公開",
     "status": "完了",
     "channel": "一般",
     "channelId": "1476013652568965185",
-    "stack": ["GitHub", "Vercel"],
-    "updatedAt": "2026-03-11"
+    "stack": ["GitHub", "Vercel", "HTML/JS"],
+    "outputs": [
+      "GitHubアカウント作成（gmktec001-lab）",
+      "Vercel連携・Hobbyプラン登録",
+      "Dev Dashboardデプロイ・公開",
+      "パスワード保護・担当別活動サマリー・トークン使用量表示"
+    ],
+    "remainingTasks": [
+      "daily.jsonの日次更新運用化（自動化検討）",
+      "トークン使用量の自動取得実装（将来）"
+    ],
+    "updatedAt": "2026-03-12"
   }
 ]
