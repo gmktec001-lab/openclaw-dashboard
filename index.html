@@ -5,234 +5,374 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenClaw Dev Dashboard</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; padding: 32px 16px; }
-    .container { max-width: 1100px; margin: 0 auto; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-    /* Auth */
-    #auth-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-    .auth-box { background: #161b22; border: 1px solid #21262d; border-radius: 12px; padding: 40px; width: 340px; text-align: center; }
-    .auth-box h2 { margin-bottom: 8px; font-size: 20px; }
-    .auth-box p { color: #8b949e; font-size: 13px; margin-bottom: 24px; }
-    .auth-box input { width: 100%; background: #0d1117; border: 1px solid #21262d; border-radius: 6px; color: #e6edf3; padding: 10px 14px; font-size: 14px; margin-bottom: 12px; outline: none; }
-    .auth-box input:focus { border-color: #388bfd; }
-    .auth-box button { width: 100%; background: #238636; border: none; border-radius: 6px; color: white; padding: 10px; font-size: 14px; cursor: pointer; font-weight: 600; }
-    .auth-box button:hover { background: #2ea043; }
-    .auth-error { color: #f85149; font-size: 12px; margin-top: 8px; }
+    :root {
+      --bg: #eef2f7;
+      --surface: #eef2f7;
+      --shadow-dark: #c8cdd8;
+      --shadow-light: #ffffff;
+      --text-primary: #3d4a5c;
+      --text-secondary: #7a8899;
+      --text-muted: #a8b4c0;
+      --neu-out: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+      --neu-in: inset 4px 4px 10px var(--shadow-dark), inset -4px -4px 10px var(--shadow-light);
+      --neu-sm: 3px 3px 8px var(--shadow-dark), -3px -3px 8px var(--shadow-light);
+      --radius: 16px;
+      --radius-sm: 10px;
+
+      --pastel-blue: #a8c5f0;
+      --pastel-green: #a8e0c0;
+      --pastel-yellow: #f5dfa0;
+      --pastel-red: #f5b8b8;
+      --pastel-purple: #c5b8f0;
+      --pastel-teal: #a8e0e0;
+
+      --accent-blue: #5b8dee;
+      --accent-green: #4dbb8a;
+      --accent-yellow: #e8b840;
+      --accent-red: #e87070;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 32px 20px;
+    }
+
+    .container { max-width: 1140px; margin: 0 auto; }
+
+    /* ─── Auth ─── */
+    #auth-screen {
+      display: flex; align-items: center; justify-content: center; min-height: 100vh;
+    }
+    .auth-box {
+      background: var(--surface);
+      box-shadow: var(--neu-out);
+      border-radius: 24px;
+      padding: 48px 40px;
+      width: 360px;
+      text-align: center;
+    }
+    .auth-logo { font-size: 48px; margin-bottom: 16px; }
+    .auth-box h2 { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .auth-box p { color: var(--text-secondary); font-size: 14px; margin-bottom: 28px; }
+    .auth-input-wrap {
+      background: var(--surface);
+      box-shadow: var(--neu-in);
+      border-radius: var(--radius-sm);
+      padding: 2px 4px;
+      margin-bottom: 16px;
+    }
+    .auth-input-wrap input {
+      width: 100%; background: transparent; border: none; outline: none;
+      color: var(--text-primary); padding: 12px 14px; font-size: 14px; font-family: inherit;
+    }
+    .auth-btn {
+      width: 100%; background: var(--surface); border: none; border-radius: var(--radius-sm);
+      box-shadow: var(--neu-out); color: var(--accent-blue); padding: 13px;
+      font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+      transition: box-shadow 0.15s;
+    }
+    .auth-btn:active { box-shadow: var(--neu-in); }
+    .auth-error { color: var(--accent-red); font-size: 12px; margin-top: 10px; }
+
     #main { display: none; }
 
-    /* Layout */
-    header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #21262d; }
-    header h1 { font-size: 24px; font-weight: 700; }
-    header p { color: #8b949e; font-size: 14px; margin-top: 4px; }
-    .logo { font-size: 28px; }
-    h2.section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* ─── Header ─── */
+    .header {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--surface); box-shadow: var(--neu-out);
+      border-radius: var(--radius); padding: 20px 28px; margin-bottom: 28px;
+    }
+    .header-logo {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: var(--surface); box-shadow: var(--neu-out);
+      display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0;
+    }
+    .header h1 { font-size: 22px; font-weight: 700; }
+    .header p { color: var(--text-secondary); font-size: 13px; margin-top: 3px; }
 
-    /* Stats */
-    .stats { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
-    .stat-card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px 24px; flex: 1; min-width: 120px; text-align: center; }
-    .stat-card .num { font-size: 32px; font-weight: 700; }
-    .stat-card .label { color: #8b949e; font-size: 13px; margin-top: 4px; }
+    /* ─── Section Title ─── */
+    .section-title {
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 14px; padding-left: 4px;
+    }
 
-    /* Token Bar */
-    .token-section { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 20px; margin-bottom: 32px; }
-    .token-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    /* ─── Stats ─── */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--surface); box-shadow: var(--neu-out);
+      border-radius: var(--radius); padding: 20px 16px; text-align: center;
+    }
+    .stat-icon { font-size: 20px; margin-bottom: 6px; }
+    .stat-num { font-size: 30px; font-weight: 700; }
+    .stat-label { color: var(--text-secondary); font-size: 12px; margin-top: 4px; }
+
+    /* ─── Token ─── */
+    .token-card {
+      background: var(--surface); box-shadow: var(--neu-out);
+      border-radius: var(--radius); padding: 22px 24px; margin-bottom: 28px;
+    }
+    .token-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .token-label { font-size: 14px; font-weight: 600; }
-    .token-numbers { font-size: 13px; color: #8b949e; }
-    .progress-bar { background: #21262d; border-radius: 100px; height: 10px; overflow: hidden; margin-bottom: 8px; }
-    .progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #238636, #3fb950); transition: width 0.5s; }
-    .token-meta { display: flex; gap: 24px; font-size: 12px; color: #8b949e; flex-wrap: wrap; }
-    .token-meta span strong { color: #e6edf3; }
+    .token-pct { font-size: 13px; color: var(--text-secondary); }
+    .progress-track {
+      background: var(--surface); box-shadow: var(--neu-in);
+      border-radius: 100px; height: 10px; overflow: hidden; margin-bottom: 14px;
+    }
+    .progress-fill {
+      height: 100%; border-radius: 100px;
+      background: linear-gradient(90deg, var(--pastel-blue), var(--accent-blue));
+      transition: width 0.6s ease;
+    }
+    .token-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+    .token-pill {
+      background: var(--surface); box-shadow: var(--neu-sm);
+      border-radius: 100px; padding: 6px 14px; font-size: 12px; color: var(--text-secondary);
+    }
+    .token-pill strong { color: var(--text-primary); }
 
-    /* Daily Activity */
-    .daily-section { margin-bottom: 32px; }
-    .activity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .activity-card { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 18px; }
-    .activity-owner { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .activity-card ul { list-style: none; }
-    .activity-card li { font-size: 13px; color: #8b949e; padding: 5px 0; border-bottom: 1px solid #21262d; display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
-    .activity-card li:last-child { border-bottom: none; }
-    .activity-card li::before { content: '›'; color: #388bfd; flex-shrink: 0; }
+    /* ─── Activity ─── */
+    .activity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .activity-card {
+      background: var(--surface); box-shadow: var(--neu-out);
+      border-radius: var(--radius); padding: 20px;
+    }
+    .activity-owner { font-size: 14px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .owner-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .activity-list { list-style: none; }
+    .activity-list li {
+      font-size: 12px; color: var(--text-secondary); padding: 6px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
+    }
+    .activity-list li:last-child { border-bottom: none; }
+    .activity-list li::before { content: '›'; color: var(--accent-blue); font-size: 14px; flex-shrink: 0; }
 
-    /* Projects Grid */
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 32px; }
-    .card { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 20px; transition: border-color 0.2s; }
-    .card:hover { border-color: #388bfd; }
-    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-    .card-title { font-size: 16px; font-weight: 600; }
-    .badge { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
-    .badge-done { background: #1f6feb33; color: #58a6ff; border: 1px solid #1f6feb; }
-    .badge-review { background: #d2992222; color: #d29922; border: 1px solid #9e6a03; }
-    .badge-dev { background: #2ea04326; color: #3fb950; border: 1px solid #238636; }
-    .badge-blocked { background: #da363326; color: #f85149; border: 1px solid #6e1a1a; }
-    .card-desc { color: #8b949e; font-size: 13px; margin-bottom: 14px; line-height: 1.5; }
-    .card-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #8b949e; }
-    .owner-badge { display: flex; align-items: center; gap: 6px; }
-    .avatar { width: 20px; height: 20px; background: #21262d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
-    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-    .tag { background: #21262d; color: #8b949e; font-size: 11px; padding: 2px 8px; border-radius: 4px; }
-    .discord-link { color: #5865f2; text-decoration: none; font-size: 12px; }
+    /* ─── Project Grid ─── */
+    .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 20px; margin-bottom: 32px; }
+    .project-card {
+      background: var(--surface); box-shadow: var(--neu-out);
+      border-radius: var(--radius); padding: 22px; transition: box-shadow 0.2s;
+    }
+    .project-card:hover { box-shadow: 8px 8px 20px var(--shadow-dark), -8px -8px 20px var(--shadow-light); }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .card-name { font-size: 15px; font-weight: 700; }
+    .badge {
+      font-size: 10px; font-weight: 700; padding: 4px 10px;
+      border-radius: 100px; white-space: nowrap; flex-shrink: 0;
+    }
+    .badge-done { background: #d8f5e8; color: #2a9060; }
+    .badge-review { background: #fef3d0; color: #b07a00; }
+    .badge-dev { background: #dde8ff; color: #3a62c4; }
+    .badge-blocked { background: #ffe0e0; color: #c43a3a; }
+
+    .card-desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 14px; line-height: 1.6; }
+
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .tag {
+      background: var(--surface); box-shadow: var(--neu-sm);
+      color: var(--text-secondary); font-size: 10px;
+      padding: 3px 10px; border-radius: 100px;
+    }
+
+    .card-footer { display: flex; justify-content: space-between; align-items: center; }
+    .owner-chip {
+      display: flex; align-items: center; gap: 7px;
+      background: var(--surface); box-shadow: var(--neu-sm);
+      border-radius: 100px; padding: 4px 12px 4px 6px; font-size: 12px; color: var(--text-secondary);
+    }
+    .avatar { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; }
+    .discord-link { color: var(--accent-blue); text-decoration: none; font-size: 11px; font-weight: 500; }
     .discord-link:hover { text-decoration: underline; }
-    .updated { color: #484f58; font-size: 11px; margin-top: 8px; }
-    .card-detail { margin-top: 12px; border-top: 1px solid #21262d; padding-top: 12px; }
-    .detail-title { font-size: 11px; font-weight: 700; color: #8b949e; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
-    .detail-list { list-style: none; }
-    .detail-list li { font-size: 12px; color: #8b949e; padding: 3px 0; display: flex; gap: 6px; align-items: flex-start; line-height: 1.4; }
-    .detail-list.output li::before { content: '✓'; color: #3fb950; flex-shrink: 0; }
-    .detail-list.tasks li::before { content: '○'; color: #d29922; flex-shrink: 0; }
-    .detail-toggle { background: none; border: 1px solid #21262d; border-radius: 4px; color: #8b949e; font-size: 11px; cursor: pointer; padding: 3px 10px; margin-top: 10px; width: 100%; }
-    .detail-toggle:hover { border-color: #388bfd; color: #e6edf3; }
+
+    /* Detail section */
+    .detail-section { margin-top: 16px; }
+    .toggle-btn {
+      width: 100%; background: var(--surface); box-shadow: var(--neu-sm);
+      border: none; border-radius: var(--radius-sm); color: var(--text-secondary);
+      font-size: 11px; font-weight: 600; cursor: pointer; padding: 8px;
+      font-family: inherit; transition: box-shadow 0.15s; margin-bottom: 0;
+    }
+    .toggle-btn:active { box-shadow: var(--neu-in); }
+    .detail-body { display: none; margin-top: 14px; }
+    .detail-block { margin-bottom: 12px; }
+    .detail-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 7px; }
+    .detail-items { list-style: none; }
+    .detail-items li { font-size: 11px; color: var(--text-secondary); padding: 4px 0; display: flex; gap: 7px; line-height: 1.5; }
+    .detail-items.out li::before { content: '✓'; color: var(--accent-green); font-weight: 700; flex-shrink: 0; }
+    .detail-items.tasks li::before { content: '○'; color: var(--accent-yellow); flex-shrink: 0; }
+
+    .updated { font-size: 10px; color: var(--text-muted); margin-top: 12px; text-align: right; }
+
+    @media (max-width: 600px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
 <body>
 
-<!-- Auth Screen -->
+<!-- Auth -->
 <div id="auth-screen">
   <div class="auth-box">
-    <div style="font-size:36px;margin-bottom:12px">🦾</div>
+    <div class="auth-logo">🦾</div>
     <h2>OpenClaw Dashboard</h2>
     <p>アクセスにはパスワードが必要です</p>
-    <input type="password" id="pw-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')checkPw()">
-    <button onclick="checkPw()">ログイン</button>
+    <div class="auth-input-wrap">
+      <input type="password" id="pw-input" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')checkPw()">
+    </div>
+    <button class="auth-btn" onclick="checkPw()">ログイン →</button>
     <div class="auth-error" id="pw-error"></div>
   </div>
 </div>
 
-<!-- Main Dashboard -->
+<!-- Main -->
 <div id="main">
   <div class="container">
-    <header>
-      <div class="logo">🦾</div>
+    <div class="header">
+      <div class="header-logo">🦾</div>
       <div>
         <h1>OpenClaw Dev Dashboard</h1>
-        <p id="header-date">並行開発プロジェクト管理</p>
+        <p id="header-sub">並行開発プロジェクト管理</p>
       </div>
-    </header>
+    </div>
 
-    <!-- Stats -->
+    <p class="section-title">概要</p>
     <div class="stats" id="stats"></div>
 
-    <!-- Token Usage -->
-    <div class="token-section" id="token-section">
-      <h2 class="section-title" style="margin-bottom:16px">🤖 トークン使用量</h2>
-      <div class="token-header">
-        <span class="token-label" id="token-label">本日の使用量</span>
-        <span class="token-numbers" id="token-numbers"></span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-      <div class="token-meta" id="token-meta"></div>
-    </div>
+    <p class="section-title">🤖 トークン使用量</p>
+    <div class="token-card" id="token-card"></div>
 
-    <!-- Daily Activity -->
-    <div class="daily-section">
-      <h2 class="section-title">📋 本日の動き（担当別）</h2>
-      <div class="activity-grid" id="activity-grid"></div>
-    </div>
+    <p class="section-title">📋 本日の動き（担当別）</p>
+    <div class="activity-grid" id="activity-grid"></div>
 
-    <!-- Projects -->
-    <h2 class="section-title">🚀 プロジェクト一覧</h2>
-    <div class="grid" id="grid"></div>
+    <p class="section-title">🚀 プロジェクト一覧</p>
+    <div class="project-grid" id="project-grid"></div>
   </div>
 </div>
 
 <script>
 const PW_HASH = '24bc382e3f81e87483a6402db43ff95418aa77acff75689f481326fa14a940dc';
+const OWNER_COLORS = { 'abcz':'#e87070','miura':'#5b8dee','Y Kuwashima':'#4dbb8a' };
+const STATUS_CLASS = { '完了':'badge-done','要件確認中':'badge-review','開発中':'badge-dev','ブロック中':'badge-blocked' };
 
-async function sha256(str) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+async function sha256(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-
 async function checkPw() {
-  const val = document.getElementById('pw-input').value;
-  const hash = await sha256(val);
-  if (hash === PW_HASH) {
-    sessionStorage.setItem('oc_auth', '1');
-    document.getElementById('auth-screen').style.display = 'none';
-    document.getElementById('main').style.display = 'block';
-    loadDashboard();
+  const v = document.getElementById('pw-input').value;
+  if (await sha256(v) === PW_HASH) {
+    sessionStorage.setItem('oc_auth','1');
+    document.getElementById('auth-screen').style.display='none';
+    document.getElementById('main').style.display='block';
+    load();
   } else {
-    document.getElementById('pw-error').textContent = 'パスワードが違います';
+    document.getElementById('pw-error').textContent='パスワードが違います';
   }
 }
-
-if (sessionStorage.getItem('oc_auth') === '1') {
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('main').style.display = 'block';
-  loadDashboard();
+if (sessionStorage.getItem('oc_auth')==='1') {
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('main').style.display='block';
+  load();
 }
 
-const statusClass = { '完了':'badge-done','要件確認中':'badge-review','開発中':'badge-dev','ブロック中':'badge-blocked' };
-const ownerColors = { 'abcz':'#f78166','miura':'#79c0ff','Y Kuwashima':'#7ee787' };
+function fmt(n){ return n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?Math.round(n/1e3)+'K':n; }
+function toggleDetail(btn) {
+  const body = btn.nextElementSibling;
+  const open = body.style.display==='block';
+  body.style.display = open?'none':'block';
+  btn.textContent = open ? '▼ 詳細を見る' : '▲ 閉じる';
+}
 
-function fmt(n) { return n >= 1000000 ? (n/1000000).toFixed(2)+'M' : n >= 1000 ? Math.round(n/1000)+'K' : n; }
-
-async function loadDashboard() {
+async function load() {
   const [projects, daily] = await Promise.all([
     fetch('./projects.json').then(r=>r.json()),
     fetch('./daily.json').then(r=>r.json())
   ]);
 
-  // Header date
-  document.getElementById('header-date').textContent = `更新: ${daily.date} | 並行開発プロジェクト管理`;
+  document.getElementById('header-sub').textContent = `更新: ${daily.date} | 並行開発プロジェクト管理`;
 
   // Stats
-  const total=projects.length, done=projects.filter(p=>p.status==='完了').length,
-        dev=projects.filter(p=>p.status==='開発中').length, rev=projects.filter(p=>p.status==='要件確認中').length;
-  document.getElementById('stats').innerHTML = `
-    <div class="stat-card"><div class="num">${total}</div><div class="label">総プロジェクト</div></div>
-    <div class="stat-card"><div class="num" style="color:#3fb950">${done}</div><div class="label">完了</div></div>
-    <div class="stat-card"><div class="num" style="color:#58a6ff">${dev}</div><div class="label">開発中</div></div>
-    <div class="stat-card"><div class="num" style="color:#d29922">${rev}</div><div class="label">要件確認中</div></div>
-  `;
+  const t=projects.length, d=projects.filter(p=>p.status==='完了').length,
+        v=projects.filter(p=>p.status==='開発中').length, r=projects.filter(p=>p.status==='要件確認中').length;
+  document.getElementById('stats').innerHTML = [
+    {icon:'📁',num:t,label:'総プロジェクト',color:'var(--text-primary)'},
+    {icon:'✅',num:d,label:'完了',color:'#2a9060'},
+    {icon:'⚡',num:v,label:'開発中',color:'#3a62c4'},
+    {icon:'💬',num:r,label:'要件確認中',color:'#b07a00'},
+  ].map(s=>`
+    <div class="stat-card">
+      <div class="stat-icon">${s.icon}</div>
+      <div class="stat-num" style="color:${s.color}">${s.num}</div>
+      <div class="stat-label">${s.label}</div>
+    </div>
+  `).join('');
 
   // Token
-  const t = daily.tokens;
-  const pct = Math.min(100, Math.round(t.used / t.limit * 100));
-  document.getElementById('token-numbers').textContent = `${fmt(t.used)} / ${fmt(t.limit)} tokens (${pct}%)`;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  if (pct > 80) document.getElementById('progress-fill').style.background = 'linear-gradient(90deg,#b62324,#f85149)';
-  else if (pct > 60) document.getElementById('progress-fill').style.background = 'linear-gradient(90deg,#9e6a03,#d29922)';
-  document.getElementById('token-meta').innerHTML = `
-    <span>💴 本日コスト: <strong>¥${t.cost_jpy.toLocaleString()}</strong></span>
-    <span>🤖 モデル: <strong>${t.model}</strong></span>
-    <span>📝 ${t.note}</span>
+  const tk = daily.tokens;
+  const pct = Math.min(100, Math.round(tk.used/tk.limit*100));
+  let fillColor = pct>80?'linear-gradient(90deg,#f5b8b8,#e87070)':pct>60?'linear-gradient(90deg,#f5dfa0,#e8b840)':'linear-gradient(90deg,var(--pastel-blue),var(--accent-blue))';
+  document.getElementById('token-card').innerHTML = `
+    <div class="token-row">
+      <span class="token-label">本日の使用量</span>
+      <span class="token-pct">${fmt(tk.used)} / ${fmt(tk.limit)} (${pct}%)</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+    <div class="token-pills">
+      <div class="token-pill">💴 本日コスト: <strong>¥${tk.cost_jpy.toLocaleString()}</strong></div>
+      <div class="token-pill">🤖 <strong>${tk.model}</strong></div>
+      <div class="token-pill">📝 ${tk.note}</div>
+    </div>
   `;
 
   // Activity
-  document.getElementById('activity-grid').innerHTML = daily.activities.map(a => `
+  document.getElementById('activity-grid').innerHTML = daily.activities.map(a=>`
     <div class="activity-card">
-      <div class="activity-owner">${a.emoji} ${a.owner}</div>
-      <ul>${a.summary.map(s=>`<li>${s}</li>`).join('')}</ul>
+      <div class="activity-owner">
+        <div class="owner-dot" style="background:${OWNER_COLORS[a.owner]||'#aaa'}"></div>
+        ${a.emoji} ${a.owner}
+      </div>
+      <ul class="activity-list">${a.summary.map(s=>`<li>${s}</li>`).join('')}</ul>
     </div>
   `).join('');
 
   // Projects
-  document.getElementById('grid').innerHTML = projects.map(p => {
+  document.getElementById('project-grid').innerHTML = projects.map((p,i)=>{
     const initials = p.owner.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    const color = ownerColors[p.owner] || '#8b949e';
+    const color = OWNER_COLORS[p.owner]||'#aaa';
+    const hasDetail = p.outputs?.length || p.remainingTasks?.length;
     return `
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">${p.name}</div>
-          <span class="badge ${statusClass[p.status]||'badge-review'}">${p.status}</span>
+      <div class="project-card">
+        <div class="card-top">
+          <div class="card-name">${p.name}</div>
+          <span class="badge ${STATUS_CLASS[p.status]||'badge-review'}">${p.status}</span>
         </div>
         <p class="card-desc">${p.description}</p>
-        <div class="tags">${p.stack.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-        <div class="card-meta">
-          <div class="owner-badge">
-            <div class="avatar" style="background:${color}22;color:${color}">${initials}</div>
+        <div class="tag-row">${p.stack.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="card-footer">
+          <div class="owner-chip">
+            <div class="avatar" style="background:${color}30;color:${color}">${initials}</div>
             ${p.owner}
           </div>
           <a class="discord-link" href="https://discord.com/channels/1476013651021398226/${p.channelId}" target="_blank">#${p.channel}</a>
         </div>
-        <div class="updated">更新: ${p.updatedAt}</div>
-        ${(p.outputs?.length || p.remainingTasks?.length) ? `
-        <button class="detail-toggle" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.textContent=this.textContent.includes('▼')?'▲ 閉じる':'▼ 詳細を見る'">▼ 詳細を見る</button>
-        <div class="card-detail" style="display:none">
-          ${p.outputs?.length ? `<div class="detail-title">✅ アウトプット</div><ul class="detail-list output">${p.outputs.map(o=>`<li>${o}</li>`).join('')}</ul>` : ''}
-          ${p.remainingTasks?.length ? `<div class="detail-title" style="margin-top:10px">📋 残タスク</div><ul class="detail-list tasks">${p.remainingTasks.map(t=>`<li>${t}</li>`).join('')}</ul>` : ''}
+        ${hasDetail ? `
+        <div class="detail-section">
+          <button class="toggle-btn" onclick="toggleDetail(this)">▼ 詳細を見る</button>
+          <div class="detail-body">
+            ${p.outputs?.length ? `<div class="detail-block"><div class="detail-label">✅ アウトプット</div><ul class="detail-items out">${p.outputs.map(o=>`<li>${o}</li>`).join('')}</ul></div>` : ''}
+            ${p.remainingTasks?.length ? `<div class="detail-block"><div class="detail-label">📋 残タスク</div><ul class="detail-items tasks">${p.remainingTasks.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
+          </div>
         </div>` : ''}
+        <div class="updated">更新: ${p.updatedAt}</div>
       </div>
     `;
   }).join('');
