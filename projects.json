@@ -113,6 +113,28 @@
     "updatedAt": "2026-03-11"
   },
   {
+    "id": "x-research",
+    "name": "Xリサーチツール",
+    "owner": "abcz",
+    "description": "X（Twitter）検索キーワードの上位投稿・ユーザー情報を自動取得→Google Sheets連携",
+    "status": "開発中",
+    "channel": "開発_xリサーチツール",
+    "channelId": "1481087588218703922",
+    "stack": ["Python", "Playwright", "Google Sheets API"],
+    "spreadsheetUrl": "https://docs.google.com/spreadsheets/d/1s4mSs_yxExxdmZwqjGYkHL_HRCoy4-oN6anky5gjRQQ/edit",
+    "outputs": [
+      "開発チャンネル作成済み",
+      "スクレイピング実装・テスト完了（「香水 バニラ」20件取得成功）",
+      "フォロワー数取得・Google Sheets書き込み動作確認済み"
+    ],
+    "remainingTasks": [
+      "複数キーワード対応・バッチ実行テスト",
+      "Windowsタスクスケジューラ設定",
+      "テスト・納品"
+    ],
+    "updatedAt": "2026-03-12"
+  },
+  {
     "id": "github-vercel-setup",
     "name": "GitHub × Vercel 連携",
     "owner": "abcz",
