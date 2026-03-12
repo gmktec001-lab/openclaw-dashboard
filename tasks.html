@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>タスク一覧 | OpenClaw Dev Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --bg: #eef2f7; --surface: #eef2f7;
+      --shadow-dark: #c8cdd8; --shadow-light: #ffffff;
+      --text-primary: #3d4a5c; --text-secondary: #7a8899; --text-muted: #a8b4c0;
+      --neu-out: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+      --neu-sm: 3px 3px 8px var(--shadow-dark), -3px -3px 8px var(--shadow-light);
+      --neu-in: inset 4px 4px 10px var(--shadow-dark), inset -4px -4px 10px var(--shadow-light);
+      --radius: 16px; --radius-sm: 10px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; padding: 28px 20px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* Auth */
+    #auth { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+    .auth-box { background:var(--surface); box-shadow:var(--neu-out); border-radius:24px; padding:48px 40px; width:340px; text-align:center; }
+    .auth-box h2 { font-size:20px; margin-bottom:6px; }
+    .auth-box p { color:var(--text-secondary); font-size:13px; margin-bottom:24px; }
+    .inp-wrap { background:var(--surface); box-shadow:var(--neu-in); border-radius:var(--radius-sm); padding:2px 4px; margin-bottom:14px; }
+    .inp-wrap input { width:100%; background:transparent; border:none; outline:none; color:var(--text-primary); padding:11px 14px; font-size:14px; font-family:inherit; }
+    .btn { width:100%; background:var(--surface); box-shadow:var(--neu-out); border:none; border-radius:var(--radius-sm); color:#5b8dee; padding:12px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; }
+    .btn:active { box-shadow:var(--neu-in); }
+    .err { color:#e87070; font-size:12px; margin-top:8px; }
+    #main { display:none; }
+
+    /* Header */
+    .header { display:flex; align-items:center; justify-content:space-between; background:var(--surface); box-shadow:var(--neu-out); border-radius:var(--radius); padding:18px 24px; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+    .header-left { display:flex; align-items:center; gap:12px; }
+    .header h1 { font-size:20px; font-weight:700; }
+    .header p { color:var(--text-secondary); font-size:12px; }
+    .back-btn { background:var(--surface); box-shadow:var(--neu-sm); border:none; border-radius:var(--radius-sm); padding:8px 16px; font-size:13px; color:#5b8dee; cursor:pointer; font-family:inherit; font-weight:600; text-decoration:none; display:inline-block; }
+
+    /* Filters */
+    .filters { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px; }
+    .filter-btn { background:var(--surface); box-shadow:var(--neu-sm); border:none; border-radius:100px; padding:7px 16px; font-size:12px; font-weight:600; cursor:pointer; font-family:inherit; color:var(--text-secondary); transition:all 0.15s; }
+    .filter-btn.active { box-shadow:var(--neu-in); color:var(--text-primary); }
+
+    /* Stats row */
+    .stat-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
+    .stat-pill { background:var(--surface); box-shadow:var(--neu-sm); border-radius:100px; padding:8px 16px; font-size:12px; color:var(--text-secondary); }
+    .stat-pill strong { color:var(--text-primary); }
+
+    /* Table */
+    .table-wrap { background:var(--surface); box-shadow:var(--neu-out); border-radius:var(--radius); overflow:hidden; }
+    table { width:100%; border-collapse:collapse; }
+    th { background:var(--bg); padding:12px 14px; font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; text-align:left; border-bottom:1px solid var(--shadow-dark); }
+    td { padding:12px 14px; font-size:13px; border-bottom:1px solid rgba(0,0,0,0.04); vertical-align:middle; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:rgba(91,141,238,0.04); }
+
+    .no-cell { color:var(--text-muted); font-size:11px; width:36px; }
+    .cat-cell { width:110px; }
+    .task-cell { font-weight:500; }
+    .target-pill { display:inline-block; background:var(--bg); box-shadow:var(--neu-sm); border-radius:100px; padding:3px 10px; font-size:11px; color:var(--text-secondary); }
+    .owner-cell { font-size:12px; color:var(--text-secondary); white-space:nowrap; }
+    .tool-cell { font-size:11px; color:var(--text-muted); max-width:140px; }
+
+    .status-badge { font-size:10px; font-weight:700; padding:3px 10px; border-radius:100px; white-space:nowrap; }
+    .s-完了 { background:#d8f5e8; color:#2a9060; }
+    .s-進行中 { background:#dde8ff; color:#3a62c4; }
+    .s-未着手 { background:#f0f4f8; color:#7a8899; }
+    .s-提案 { background:#fef3d0; color:#b07a00; }
+    .s-ブロック { background:#ffe0e0; color:#c43a3a; }
+
+    .pri-high { color:#e87070; font-weight:700; font-size:11px; }
+    .pri-mid { color:#e8b840; font-weight:600; font-size:11px; }
+    .pri-low { color:#7a8899; font-size:11px; }
+
+    .delivery-link { color:#5b8dee; font-size:11px; text-decoration:none; }
+    .delivery-link:hover { text-decoration:underline; }
+
+    .synced { font-size:11px; color:var(--text-muted); }
+
+    @media (max-width:768px) {
+      .tool-cell, .detail-col { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="auth">
+  <div class="auth-box">
+    <div style="font-size:36px;margin-bottom:12px">📋</div>
+    <h2>タスク一覧</h2>
+    <p>アクセスにはパスワードが必要です</p>
+    <div class="inp-wrap"><input type="password" id="pw" placeholder="パスワードを入力" onkeydown="if(event.key==='Enter')check()"></div>
+    <button class="btn" onclick="check()">ログイン →</button>
+    <div class="err" id="err"></div>
+  </div>
+</div>
+
+<div id="main">
+<div class="container">
+  <div class="header">
+    <div class="header-left">
+      <div>
+        <h1>📋 タスク一覧</h1>
+        <p id="synced-at">スプレッドシート同期済み</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a href="https://docs.google.com/spreadsheets/d/1U36buRkc2gyv0-QVTCGwcUILQt5Du9fKeBApggFB6Eo/edit" target="_blank" class="back-btn">📊 シートを開く</a>
+      <a href="./index.html" class="back-btn">← ダッシュボード</a>
+    </div>
+  </div>
+
+  <div class="stat-row" id="stat-row"></div>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th class="no-cell">No</th>
+          <th>カテゴリ</th>
+          <th>業務内容</th>
+          <th>対象</th>
+          <th class="tool-cell">ツール</th>
+          <th>担当</th>
+          <th>優先度</th>
+          <th>ステータス</th>
+          <th>納品</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<script>
+const PW_HASH = '24bc382e3f81e87483a6402db43ff95418aa77acff75689f481326fa14a940dc';
+async function sha256(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function check(){const v=document.getElementById('pw').value;if(await sha256(v)===PW_HASH){sessionStorage.setItem('oc_auth','1');document.getElementById('auth').style.display='none';document.getElementById('main').style.display='block';load();}else{document.getElementById('err').textContent='パスワードが違います';}}
+if(sessionStorage.getItem('oc_auth')==='1'){document.getElementById('auth').style.display='none';document.getElementById('main').style.display='block';load();}
+
+const CAT_COLORS = {
+  'SEOリサーチ':'#e87070','SNSリサーチ':'#5b8dee','ECリサーチ':'#4dbb8a',
+  'CS対応':'#e8b840','LINE対応':'#7ec8e3','EC入稿':'#c47de8',
+  'EC分析':'#4dbb8a','競合分析':'#e87070','コンテンツ生成':'#5b8dee',
+  '価格監視':'#e8b840','レビュー分析':'#7ec8e3','経理':'#a8b4c0','サイト作成':'#4dbb8a'
+};
+const PRIORITY = {'高':'pri-high','中':'pri-mid','低':'pri-low'};
+
+let allTasks = [];
+let currentFilter = 'ALL';
+
+function renderTable(tasks) {
+  document.getElementById('tbody').innerHTML = tasks.map(t => `
+    <tr>
+      <td class="no-cell">${t.no}</td>
+      <td class="cat-cell"><span style="font-size:11px;font-weight:700;color:${CAT_COLORS[t.category]||'#aaa'}">${t.category}</span></td>
+      <td class="task-cell">${t.task}</td>
+      <td><span class="target-pill">${t.target}</span></td>
+      <td class="tool-cell">${t.tool}</td>
+      <td class="owner-cell">${t.owner || '—'}</td>
+      <td><span class="${PRIORITY[t.priority]||'pri-low'}">${t.priority||'—'}</span></td>
+      <td><span class="status-badge s-${t.status}">${t.status}</span></td>
+      <td>${t.deliveryUrl ? `<span style="font-size:11px;color:#4dbb8a">✓</span>` : '—'}</td>
+    </tr>
+  `).join('');
+}
+
+async function load() {
+  const data = await fetch('./tasks.json').then(r=>r.json());
+  allTasks = data.tasks;
+  document.getElementById('synced-at').textContent = `シート同期: ${data.syncedAt} | ${data.tasks.length}件`;
+
+  // Stats
+  const done = allTasks.filter(t=>t.status==='完了').length;
+  const prog = allTasks.filter(t=>t.status==='進行中').length;
+  const todo = allTasks.filter(t=>t.status==='未着手').length;
+  const prop = allTasks.filter(t=>t.status==='提案').length;
+  document.getElementById('stat-row').innerHTML = [
+    {label:'全タスク',val:allTasks.length,color:''},
+    {label:'完了',val:done,color:'#2a9060'},
+    {label:'進行中',val:prog,color:'#3a62c4'},
+    {label:'未着手',val:todo,color:'#7a8899'},
+    {label:'提案',val:prop,color:'#b07a00'},
+  ].map(s=>`<div class="stat-pill">${s.label}: <strong style="color:${s.color||'inherit'}">${s.val}</strong></div>`).join('');
+
+  // Filters
+  const cats = ['ALL', ...new Set(allTasks.map(t=>t.category))];
+  document.getElementById('filters').innerHTML = cats.map(c=>`<button class="filter-btn${c==='ALL'?' active':''}" onclick="filterBy('${c}',this)">${c}</button>`).join('');
+
+  renderTable(allTasks);
+}
+
+function filterBy(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable(cat==='ALL' ? allTasks : allTasks.filter(t=>t.category===cat));
+}
+</script>
+</body>
+</html>
