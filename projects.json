@@ -51,24 +51,16 @@
     "name": "Shopify新規サイト制作",
     "owner": "miura",
     "description": "Shopifyで新規ECサイトをゼロから構築",
-    "status": "要件確認中",
+    "status": "完了",
     "channel": "開発_shopifyサイト制作",
     "channelId": "1481165848985993266",
     "stack": ["Shopify", "Liquid", "HTML/CSS"],
     "spreadsheetUrl": null,
     "outputs": [
-      "開発チャンネル作成済み",
-      "要件確認メッセージ送信済み"
+      "Shopify新規サイト構築・公開完了"
     ],
-    "remainingTasks": [
-      "要件確認（販売商品・デザイン方向性・ドメイン・機能・スケジュール）",
-      "Shopifyアカウント作成 or 確認",
-      "テーマ選定・カスタマイズ",
-      "商品登録・ページ作成",
-      "決済設定・ドメイン連携",
-      "テスト・公開"
-    ],
-    "updatedAt": "2026-03-11"
+    "remainingTasks": [],
+    "updatedAt": "2026-03-12"
   },
   {
     "id": "instagram-research",
