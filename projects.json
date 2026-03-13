@@ -26,25 +26,21 @@
     "id": "lemon8-youtube-scraper",
     "name": "Lemon8＆YouTubeスクレイパー",
     "owner": "miura",
-    "description": "Lemon8検索結果スクレイピング＆YouTube Data API改善ツール",
-    "status": "要件確認中",
+    "description": "Lemon8検索結果スクレイピング＆YouTubeランクトラッカー（Playwright + Google Sheets連携）",
+    "status": "完了",
     "channel": "開発_lemon8-youtube-スクレイパー",
     "channelId": "1481116932928438355",
-    "stack": ["Python / Node.js", "Playwright", "YouTube Data API"],
+    "stack": ["Python", "Playwright", "Google Sheets API", "YouTube Data API"],
     "spreadsheetUrl": "https://docs.google.com/spreadsheets/d/11rPic32KyeXv02cyIkaxobTJB9H4zoL9XGuXYlitU3M/edit",
     "outputs": [
-      "開発チャンネル作成済み",
-      "要件確認メッセージ送信済み",
-      "YouTube取得方法A/Bの提案済み"
+      "Lemon8スクレイパー実装・動作確認済み（/discover/ URL対応）",
+      "取得項目: キーワード / タイトル / 投稿者名 / いいね数 / フォロワー数 / 投稿URL / 取得日時",
+      "YouTubeランクトラッカー実装・動作確認済み",
+      "取得項目: キーワード / 順位 / 動画タイトル / チャンネル名 / チャンネル登録者数 / チャンネルURL / 再生回数 / 投稿日 / 動画URL / 取得日時",
+      "キーワード管理・結果出力ともにGoogleスプレッドシート連携"
     ],
-    "remainingTasks": [
-      "要件確認（取得情報・出力形式・頻度・言語）",
-      "Lemon8: Playwright スクレイパー実装",
-      "YouTube: 方法確定後に実装（API改善 or ブラウザ直接取得）",
-      "スプレッドシート連携",
-      "テスト・納品"
-    ],
-    "updatedAt": "2026-03-11"
+    "remainingTasks": [],
+    "updatedAt": "2026-03-13"
   },
   {
     "id": "shopify-site",
